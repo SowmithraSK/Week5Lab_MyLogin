@@ -14,8 +14,9 @@
     <body>
         <h1>Home Page</h1>
         <h3>Hello ${username}</h3>
-        <form method="get" action="home">
+        <form method="get" action="login">
             <a href="login">Log out</a>
+            <input type="hidden" name="action" value="logout">
         </form>
         
     </body>
