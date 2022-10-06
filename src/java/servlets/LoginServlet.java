@@ -19,15 +19,26 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        //NEED TO FIX THE LOGIC
         
+        //logout functionality 
         HttpSession session = request.getSession();
-        session.removeAttribute("username");
-        session.removeAttribute("password");
-        
-        request.setAttribute("message", "You have successfully logged out");
-        
-        getServletContext().getRequestDispatcher("/WEB-INF/login.jsp")
+        String action = request.getParameter("action");
+        //if there is a session and no logging out 
+        if(action == null && session.getAttribute("username") != null){
+            response.sendRedirect("/Week5Lab_MyLogin/home");
+            //there is a session and logging out
+        } else if(action == null && session.getAttribute("username") == null){
+            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp")
                 .forward(request, response);
+        } else if(action != null && session.getAttribute("username") != null){
+            session.removeAttribute("username");
+            session.removeAttribute("password");
+            request.setAttribute("message", "You have successfully logged out");
+            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp")
+                .forward(request, response);
+        }
+        
     }
 
     @Override
@@ -43,6 +54,7 @@ public class LoginServlet extends HttpServlet {
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp")
                 .forward(request, response);
         }
+        
         AccountService account = new AccountService();
         User user = account.login(username, password);
         if(user != null){
@@ -50,6 +62,8 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect("/Week5Lab_MyLogin/home");
         } else{
             request.setAttribute("message", "Invalid login. Please try again.");
+            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp")
+                .forward(request, response);
         }
         
         
