@@ -25,19 +25,13 @@ public class LoginServlet extends HttpServlet {
         HttpSession session = request.getSession();
         String action = request.getParameter("action");
         //if there is a session and no logging out 
-        if(action == null && session.getAttribute("username") != null){
-            response.sendRedirect("/Week5Lab_MyLogin/home");
-            //there is a session and logging out
-        } else if(action == null && session.getAttribute("username") == null){
-            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp")
-                .forward(request, response);
-        } else if(action != null && session.getAttribute("username") != null){
+        
             session.removeAttribute("username");
             session.removeAttribute("password");
             request.setAttribute("message", "You have successfully logged out");
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp")
                 .forward(request, response);
-        }
+        
         
     }
 
